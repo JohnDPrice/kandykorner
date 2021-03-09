@@ -1,22 +1,48 @@
-import React, { useContext, useEffect } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { ProductContext } from "./ProductProvider"
 import { ProductCard } from "./ProductCard"
 import "./Product.css"
+import { useHistory } from "react-router-dom"
 
 export const ProductList = () => {
-    const {products, getProducts} = useContext(ProductContext)
+  const { products, getProducts, searchTerms } = useContext(ProductContext)
 
-    useEffect(() => {
-        getProducts()
-    }, [])
+  // Since you are no longer ALWAYS displaying all of the animals
+  const [ filteredProducts, setFiltered ] = useState([])
+  const history = useHistory()
 
-    return (
-        <div className="products">
-            {
-                products.map(singleProduct => {
-                    return <ProductCard key={singleProduct.id} product={singleProduct}/>
-                })
-            }
-        </div>
-    )
+  // Empty dependency array - useEffect only runs after first render
+  useEffect(() => {
+      getProducts()
+  }, [])
+
+  // useEffect dependency array with dependencies - will run if dependency changes (state)
+  // searchTerms will cause a change
+  useEffect(() => {
+    if (searchTerms !== "") {
+      // If the search field is not blank, display matching animals
+      const subset = products.filter(product => product.name.toLowerCase().includes(searchTerms))
+      setFiltered(subset)
+    } else {
+      // If the search field is blank, display all animals
+      setFiltered(products)
+    }
+  }, [searchTerms, products])
+
+  return (
+    <>
+      <h1>Products</h1>
+
+      <button onClick={() => history.push("/products/create")}>
+          Make Reservation
+      </button>
+      <div className="products">
+      {
+        filteredProducts.map(product => {
+          return <ProductCard key={product.id} product={product} />
+        })
+      }
+      </div>
+    </>
+  )
 }
