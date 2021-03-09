@@ -10,7 +10,7 @@ export const ProductSearch = () => {
       Product search:
       <input type="text"
         className="input--wide"
-        onKeyUp={(event) => setSearchTerms(event.target.value)}
+        onKeyUp={(event) => setSearchTerms(event.target.value.toLowerCase())}
         placeholder="Search for a product... " />
     </>
   )

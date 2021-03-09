@@ -7,7 +7,7 @@ import { useHistory } from "react-router-dom"
 export const ProductList = () => {
   const { products, getProducts, searchTerms } = useContext(ProductContext)
 
-  // Since you are no longer ALWAYS displaying all of the animals
+  // Since you are no longer ALWAYS displaying all of the products
   const [ filteredProducts, setFiltered ] = useState([])
   const history = useHistory()
 
@@ -20,11 +20,11 @@ export const ProductList = () => {
   // searchTerms will cause a change
   useEffect(() => {
     if (searchTerms !== "") {
-      // If the search field is not blank, display matching animals
+      // If the search field is not blank, display matching products
       const subset = products.filter(product => product.name.toLowerCase().includes(searchTerms))
       setFiltered(subset)
     } else {
-      // If the search field is blank, display all animals
+      // If the search field is blank, display all products
       setFiltered(products)
     }
   }, [searchTerms, products])
